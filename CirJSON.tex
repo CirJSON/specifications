@@ -1,0 +1,53 @@
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+
+\documentclass[12pt,twoside,titlepage]{report}
+
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{nameref}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{ifthen}
+\usepackage{inconsolata}
+\usepackage[documentfont=DoulosSIL]{tipauni}
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes}
+
+\hypersetup{colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black}
+
+% Definitions des dimensions de la page (package geometry)
+\geometry{letterpaper,%
+	centering,%
+	hmargin={2.5cm,2.5cm},%
+	vmargin={2.5cm,2.5cm},%
+	heightrounded,%
+	includehead}
+
+\fancyhf{} % clear all header and footers
+\renewcommand{\headrulewidth}{0pt} % remove the header rule
+\fancyfoot[RE,LO]{\thepage} % Left side on Even pages; Right side on Odd pages
+\pagestyle{fancy}
+
+\renewcommand{\chaptername}{}
+\titleformat{\chapter}[hang] 
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{1em}{}
+
+\title{CirJSON}
+\author{The CirJSON Data Interchange Syntax}
+
+\begin{document}
+	\include{tex/start.tex}
+
+	\include{tex/syntax.tex}
+\end{document}
