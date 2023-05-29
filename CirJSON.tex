@@ -15,6 +15,9 @@
 \usepackage{ifthen}
 \usepackage{inconsolata}
 \usepackage[documentfont=DoulosSIL]{tipauni}
+\usepackage{lmodern}
+\usepackage{float}
+\usepackage{placeins}
 
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{positioning}
@@ -43,11 +46,59 @@
 \titleformat{\chapter}[hang] 
 {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{1em}{}
 
+\renewcommand{\baselinestretch}{1.5}
+
+\newfontfamily{\doulos}{DoulosSIL}
+
+\newcommand{\multiLinksRight}[2]{
+	\begin{scope}[x=1em,y=1em]
+		\newdimen\xstart
+		\newdimen\ystart
+		\path (#1.east);
+		\pgfgetlastxy{\xstart}{\ystart}
+		\foreach \i in {#2} {
+			\newdimen\xend
+			\newdimen\yend
+			\path (\i.west);
+			\pgfgetlastxy{\xend}{\yend}
+			\coordinate (1) at ({(\xend+\xstart)/2},\ystart);
+			\coordinate (2) at ({(\xend+\xstart)/2},\yend);
+			\ifdim\ystart=\yend
+			\draw[|-] (#1.east)--(\i.west);
+			\else
+			\draw[|-,rounded corners] (#1.east)--(1)--(2)--(\i.west);
+			\fi
+		}
+	\end{scope}
+}
+\newcommand{\multiLinksLeft}[2]{
+\begin{scope}[x=1em,y=1em]
+	\newdimen\xend
+	\newdimen\yend
+	\path (#2.west);
+	\pgfgetlastxy{\xend}{\yend}
+	\foreach \i in {#1} {
+		\newdimen\xstart
+		\newdimen\ystart
+		\path (\i.east);
+		\pgfgetlastxy{\xstart}{\ystart}
+		\coordinate (1) at ({(\xend+\xstart)/2},\ystart);
+		\coordinate (2) at ({(\xend+\xstart)/2},\yend);
+		\ifdim\ystart=\yend
+		\draw[-|] (\i.east)--(#2.west);
+		\else
+		\draw[-|,rounded corners] (\i.east)--(1)--(2)--(#2.west);
+		\fi
+	}
+\end{scope}
+}
+
 \title{CirJSON}
 \author{The CirJSON Data Interchange Syntax}
 
 \begin{document}
 	\include{tex/start.tex}
 
+	\include{tex/introduction.tex}
 	\include{tex/syntax.tex}
 \end{document}

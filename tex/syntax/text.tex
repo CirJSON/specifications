@@ -1,0 +1,50 @@
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+
+\section{CirJSON Text}
+
+A CirJSON text is a sequence of tokens formed from Unicode code points that conforms to the CirJSON value grammar.
+The set of tokens includes six structural tokens, strings, numbers, and three literal name tokens.
+
+The six structural tokens:
+
+\begin{table*}[htp]
+	\begin{tabular}{lll}
+		\texttt{[} & U+005B & left square bracket \\
+		\texttt{\{} & U+007B & left curly bracket \\
+		\texttt{]} & U+005D & right square bracket \\
+		\texttt{\}} & U+007D & right curly bracket \\
+		\texttt{:} & U+003A & colon \\
+		\texttt{,} & U+002C & comma \\
+	\end{tabular}
+\end{table*}
+
+These are the three literal name tokens:
+
+\begin{table*}[htp]
+	\begin{tabular}{llllll}
+		\texttt{true} & U+0074 & U+0072 & U+0075 & U+0065 & ~ \\
+		\texttt{false} & U+0066 & U+0061 & U+006C & U+0073 & U+0065 \\
+		\texttt{null} & U+006E & U+0075 & U+006C & U+006C & ~ \\
+	\end{tabular}
+\end{table*}
+
+Insignificant whitespace is allowed before or after any token.
+Whitespace is any sequence of one or more of the following code points:
+
+\FloatBarrier
+
+\begin{table*}[!htbp]
+	\begin{tabular}{ll}
+		character tabulation & U+0009 \\
+		line feed & U+000A \\
+		carriage return & U+000D \\
+		space & U+0020 \\
+		line separator & U+2028 \\
+		paragraph separator & U+2029 \\
+	\end{tabular}
+\end{table*}
+
+\FloatBarrier
+
+Whitespace is not allowed within any token, except that space is allowed in strings.
