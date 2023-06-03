@@ -71,7 +71,8 @@
 		}
 	\end{scope}
 }
-\newcommand{\multiLinksLeft}[2]{
+
+\newcommand{\multiLinksBase}[3]{
 \begin{scope}[x=1em,y=1em]
 	\newdimen\xend
 	\newdimen\yend
@@ -85,11 +86,79 @@
 		\coordinate (1) at ({(\xend+\xstart)/2},\ystart);
 		\coordinate (2) at ({(\xend+\xstart)/2},\yend);
 		\ifdim\ystart=\yend
-		\draw[-|] (\i.east)--(#2.west);
+		\draw[#3] (\i.east)--(#2.west);
 		\else
-		\draw[-|,rounded corners] (\i.east)--(1)--(2)--(#2.west);
+		\draw[#3,rounded corners] (\i.east)--(1)--(2)--(#2.west);
 		\fi
 	}
+\end{scope}
+}
+
+\newcommand{\multiLinks}[2]{\multiLinksBase{#1}{#2}{-}}
+\newcommand{\multiLinksEnd}[2]{\multiLinksBase{#1}{#2}{-|}}
+
+\newcommand{\linkReverseS}[4]{
+\begin{scope}[x=1em,y=1em]
+	\newdimen\xStartOne
+	\newdimen\yStartOne
+	\path (#1.east);
+	\pgfgetlastxy{\xStartOne}{\yStartOne}
+	\newdimen\xStartTwo
+	\newdimen\yStartTwo
+	\path (#2.west);
+	\pgfgetlastxy{\xStartTwo}{\yStartTwo}
+	\newdimen\xEndOne
+	\newdimen\yEndOne
+	\path (#3.east);
+	\pgfgetlastxy{\xEndOne}{\yEndOne}
+	\newdimen\xEndTwo
+	\newdimen\yEndTwo
+	\path (#4.west);
+	\pgfgetlastxy{\xEndTwo}{\yEndTwo}
+
+	\coordinate (1) at ({(\xStartOne+\xStartTwo)/2},{(\yStartOne+\yStartTwo)/2});
+	\coordinate (2) at ({(\xStartOne+\xStartTwo)/2},{(\yStartOne+\yEndTwo)/2});
+	\coordinate (3) at ({(\xEndOne+\xEndTwo)/2},{(\yStartOne+\yEndTwo)/2});
+	\coordinate (4) at ({(\xEndOne+\xEndTwo)/2},{(\yEndOne+\yEndTwo)/2});
+	\draw[-,rounded corners] (#1.east)--(1)--(2)--(3)--(4)--(#4.west);
+\end{scope}
+}
+
+\newcommand{\linkHalfLoopRight}[3]{
+\begin{scope}[x=1em,y=1em]
+	\newdimen\xStartOne
+	\newdimen\yStart
+	\newdimen\xStartTwo
+	\newdimen\yEnd
+	\path (#3.east);
+	\pgfgetlastxy{\xStartOne}{\yEnd}
+	\path (#2.west);
+	\pgfgetlastxy{\xStartTwo}{\yStart}
+	\path (#1.east);
+	\pgfgetlastxy{\xStartOne}{\yStart}
+	
+	\coordinate (1) at ({(\xStartOne+\xStartTwo)/2},\yStart);
+	\coordinate (2) at ({(\xStartOne+\xStartTwo)/2},\yEnd);
+	\draw[-,rounded corners] (#1.east)--(1)--(2)--(#3.east);
+\end{scope}
+}
+
+\newcommand{\linkHalfLoopLeft}[3]{
+\begin{scope}[x=1em,y=1em]
+	\newdimen\xStartOne
+	\newdimen\yStart
+	\newdimen\xStartTwo
+	\newdimen\yEnd
+	\path (#3.west);
+	\pgfgetlastxy{\xStartOne}{\yEnd}
+	\path (#2.east);
+	\pgfgetlastxy{\xStartTwo}{\yStart}
+	\path (#1.west);
+	\pgfgetlastxy{\xStartOne}{\yStart}
+	
+	\coordinate (1) at ({(\xStartOne+\xStartTwo)/2},\yStart);
+	\coordinate (2) at ({(\xStartOne+\xStartTwo)/2},\yEnd);
+	\draw[-,rounded corners] (#1.west)--(1)--(2)--(#3.west);
 \end{scope}
 }
 

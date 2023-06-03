@@ -1,0 +1,38 @@
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+
+\section{Numbers}
+
+A number is a sequence of decimal digits with no superfluous leading zero.
+It may have a preceding minus sign \texttt{–} (U+002D).
+It may have a fractional part prefixed by a decimal point \texttt{.} (U+002E).
+It may have an exponent, prefixed by \texttt{e} (U+0065) or \texttt{E} (U+0045) and optionally \texttt{+} (U+002B) or \texttt{–} (U+002D).
+The digits are the code points U+0030 through U+0039.
+
+Numeric values that cannot be represented as sequences of digits (such as \texttt{Infinity} and \texttt{NaN}) are not permitted.
+
+\begin{figure}[!htbp]
+	\centering
+	\tikzset{
+		bas/.style={draw, fill=couleurback, thick, align=flush center, line width=2pt},
+		tok/.style={bas, rounded corners=8pt, text width=8pt, text height=8pt},
+		val/.style={bas},
+	}
+	\begin{tikzpicture}[line width=2pt]
+		\matrix[row sep=1em, column sep=0.5em] {
+			\node{\textbf{\textit{number}}}; & ~ & ~ & ~ & ~ & ~ & \node(up){~}; & ~ & ~ & ~ & ~ \\
+			\node(start){~}; & ~ & \node(bd){~}; & \node[tok](zer){0}; & ~ & \node[tok](dot){\texttt{.}}; & \node[val](dfl){\textit{digit}}; & ~ & ~ & ~ & \node(end){~}; \\
+			~ & \node[tok](neg){\texttt{-}}; & ~ & \node[val](fdi){\textit{digit} \\ \textit{1-9}}; & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\
+		};
+		
+		\draw[|-] (start) -- (zer.west);
+		\draw[-] (zer.east) -- (dot.west);
+		\draw[-] (dot.east) -- (dfl.west);
+		\draw[-|] (dfl.east) -- (end);
+		
+		\multiLinksRight{start}{neg}
+		\multiLinks{neg}{bd}
+	\end{tikzpicture}
+	\caption{number}
+	\label{f:nums}
+\end{figure}

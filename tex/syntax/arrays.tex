@@ -1,0 +1,64 @@
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+
+\section{Arrays}
+
+An array structure is a pair of square bracket tokens surrounding its ID and zero or more \textit{values}.
+The \textit{values} and the ID are separated by commas.
+The first value is the array's ID.
+The CirJSON syntax does not define any specific meaning to the ordering of the following \textit{values}.
+However, the CirJSON array structure is often used in situations where there is some semantics to the ordering.
+
+\begin{figure}[!htbp]
+	\centering
+	\tikzset{
+		bas/.style={draw, fill=couleurback, thick, align=flush center, line width=2pt, text height=8pt},
+		tok/.style={bas, rounded corners=8pt, text width=8pt},
+		val/.style={bas, text width=6em},
+		lit/.style={bas, rounded corners=8pt},
+	}
+	\begin{tikzpicture}[line width=2pt]
+		\matrix[row sep=2em, column sep=2em] {
+			\node{\textbf{\textit{array}}}; & ~ & ~ & ~ & \node(up){~}; & ~ & ~ & ~ \\
+			\node(start){~}; & \node[tok](op){\textbf{\texttt{[}}}; & \node[val](id){\textbf{\textit{ID}}}; & \node[tok](ic){\textbf{\texttt{,}}}; & \node[val](val){\textbf{\textit{value}}}; & \node(bp){~}; & \node[tok](cp){\textbf{\texttt{]}}}; & \node(end){~}; \\
+			~ & ~ & ~ & ~ & \node[tok](ac){,}; & ~ & ~ & ~ \\
+		};
+
+		\draw[|-] (start) -- (op.west);
+		\draw[-] (op.east) -- (id.west);
+		\draw[-] (id.east) -- (ic.west);
+		\draw[-] (ic.east) -- (val.west);
+		\draw[-] (val.east) -- (cp.west);
+		\draw[-|] (cp.east) -- (end);
+
+		\linkHalfLoopLeft{val}{ic}{ac}
+		\linkHalfLoopRight{val}{bp}{ac}
+
+		\begin{scope}[x=1em,y=1em]
+			\newdimen\useless
+			\newdimen\xStaOne
+			\newdimen\xStaTwo
+			\newdimen\xEndOne
+			\newdimen\xEndTwo
+			\newdimen\ySta
+			\newdimen\yEnd
+			\path (id.east);
+			\pgfgetlastxy{\xStaOne}{\ySta}
+			\path (ic.west);
+			\pgfgetlastxy{\xStaTwo}{\useless}
+			\path (bp.east);
+			\pgfgetlastxy{\xEndOne}{\useless}
+			\path (cp.west);
+			\pgfgetlastxy{\xEndTwo}{\useless}
+			\path (up.east);
+			\pgfgetlastxy{\useless}{\yEnd}
+			\coordinate (1) at ({(\xStaOne+\xStaTwo)/2},\ySta);
+			\coordinate (2) at ({(\xStaOne+\xStaTwo)/2},\yEnd);
+			\coordinate (3) at ({(\xEndOne+\xEndTwo)/2},\yEnd);
+			\coordinate (4) at ({(\xEndOne+\xEndTwo)/2},\ySta);
+			\draw[-,rounded corners] (id.east)--(1)--(2)--(3)--(4)--(cp.west);
+		\end{scope}
+	\end{tikzpicture}
+	\caption{array}
+	\label{f:arrs}
+\end{figure}
