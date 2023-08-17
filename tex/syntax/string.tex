@@ -1,0 +1,186 @@
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+
+\section{String}
+
+A string is a sequence of Unicode code points wrapped with quotation marks (U+0022).
+All code points may be placed within the quotation marks except for the code points that must be escaped: quotation mark (U+0022), reverse solidus (U+005C), and the control characters (U+0000 to U+001F).
+
+There are two-character escape sequence representations of some characters:
+
+\begin{table*}[htp]
+	\begin{tabular}{ll}
+		\texttt{\textbackslash"} & represents the quotation mark character (U+0022). \\
+		\texttt{\textbackslash\textbackslash} & represents the reverse solidus character (U+005C).. \\
+		\texttt{\textbackslash/} & represents the solidus character (U+002F). \\
+		\texttt{{\textbackslash}b} & represents the backspace character (U+0008). \\
+		\texttt{{\textbackslash}f} & represents the form feed character (U+000C). \\
+		\texttt{{\textbackslash}n} & represents the line feed character (U+000A). \\
+		\texttt{{\textbackslash}r} & represents the carriage return character (U+000D). \\
+		\texttt{{\textbackslash}t} & represents the character tabulation character (U+0009). \\
+	\end{tabular}
+\end{table*}
+
+So, for example, a string containing only a single reverse solidus character may be represented as \texttt{"\textbackslash\textbackslash"}.
+
+Any code point may be represented as a hexadecimal escape sequence.
+The meaning of such a hexadecimal number is determined by ISO/IEC 10646.
+If the code point is in the Basic Multilingual Plane (U+0000 through U+FFFF), then it may be represented as a six-character sequence: a reverse solidus, followed by the lowercase letter \texttt{u}, followed by four hexadecimal digits that encode the code point.
+Hexadecimal digits can be digits (U+0030 through U+0039) or the hexadecimal letters \texttt{A} through \texttt{F} in uppercase (U+0041 through U+0046) or lowercase (U+0061 through U+0066).
+So, for example, a string containing only a single reverse solidus character may be represented as \texttt{"{\textbackslash}u005C"}.
+
+The following four cases all produce the same result:
+
+\FloatBarrier
+
+\begin{table*}[!htbp]
+	\begin{tabular}{l}
+		\texttt{"{\textbackslash}u002F"} \\
+		\texttt{"{\textbackslash}u002f"} \\
+		\texttt{"{\textbackslash}/"} \\
+		\texttt{"/"} \\
+	\end{tabular}
+\end{table*}
+
+\FloatBarrier
+
+To escape a code point that is not in the Basic Multilingual Plane, the character may be represented as a twelve-character sequence, encoding the UTF-16 surrogate pair corresponding to the code point.
+So for example, a string containing only the G clef character (U+1D11E) may be represented as \texttt{"{\textbackslash}uD834{\textbackslash}uDD1E"}.
+However, whether a processor of JSON texts interprets such a surrogate pair as a single code point or as an explicit surrogate pair is a semantic decision that is determined by the specific processor.
+
+Note that the CirJSON grammar permits code points for which Unicode does not currently provide character assignments.
+
+\FloatBarrier
+
+\begin{figure}[!htbp]
+	\centering
+	\tikzset{
+		bas/.style={draw, fill=couleurback, thick, align=flush center, line width=2pt},
+		tok/.style={bas, rounded corners=8pt, text width=8pt, text height=8pt},
+		val/.style={bas},
+	}
+	\begin{tikzpicture}[line width=2pt]
+		\matrix[row sep=1em, column sep=1em](mat) {
+			\node{\textbf{\textit{string}}}; & ~ & ~ & ~ & \node(ab){~}; & ~ & ~ & ~ & ~ \\
+			\node(start){~}; & \node[tok](bs){\texttt{"}}; & \node(as){~}; & ~ & ~ & ~ & \node(be){~}; & \node[tok](es){\texttt{"}}; & \node(end){~}; \\[1em]
+			~ & ~ & ~ & \node[tok](se){\texttt{\textbackslash}}; & \node[tok](qm){\texttt{"}}; & ~ & ~ & ~ & ~ \\
+			~ & ~ & ~ & ~ & \node[tok](rs){\texttt{\textbackslash}}; & ~ & ~ & ~ & ~ \\
+			~ & ~ & ~ & ~ & \node[tok](so){\texttt{/}}; & ~ & ~ & ~ & ~ \\
+			~ & ~ & ~ & ~ & \node[tok](ba){\texttt{b}}; & ~ & ~ & ~ & ~ \\
+			~ & ~ & ~ & ~ & \node[tok](ff){\texttt{f}}; & ~ & ~ & ~ & ~ \\
+			~ & ~ & ~ & ~ & \node[tok](lf){\texttt{n}}; & ~ & ~ & ~ & ~ \\
+			~ & ~ & ~ & ~ & \node[tok](cr){\texttt{r}}; & ~ & ~ & ~ & ~ \\
+			~ & ~ & ~ & ~ & \node[tok](ct){\texttt{t}}; & ~ & ~ & ~ & ~ \\
+			~ & ~ & ~ & ~ & \node[tok](sh){\texttt{u}}; & \node[val](hd){4 hexadecimal digits}; & ~ & ~ & ~ \\
+		};
+		
+		\node[val](cp) at ($(as)!0.5!(be)$) {\textbf{\textit{Any code point except \texttt{"} or \texttt{\textbackslash}}} \\ \textbf{\textit{or control character}}};
+		
+		\draw[|-] (start.east) -- (bs.west);
+		\draw[-] (bs.east) -- (cp.west);
+		\draw[-] (cp.east) -- (es.west);
+		\draw[-|] (es.east) -- (end.east);
+		\draw[-] (sh.east) -- (hd.west);
+		
+		\begin{scope}[x=1em,y=1em]
+			\newdimen\useless
+			\newdimen\xStartOne
+			\newdimen\yStart
+			\newdimen\xStartTwo
+			\newdimen\xEndOne
+			\newdimen\xEndTwo
+			\newdimen\yMid
+			
+			\path (bs.east);
+			\pgfgetlastxy{\xStartOne}{\yStart}
+			\path (as.west);
+			\pgfgetlastxy{\xStartTwo}{\useless}
+			\path (ab);
+			\pgfgetlastxy{\useless}{\yMid}
+			\path (be.east);
+			\pgfgetlastxy{\xEndOne}{\useless}
+			\path (es.west);
+			\pgfgetlastxy{\xEndTwo}{\useless}
+			
+			\coordinate (1) at ({(\xStartOne+\xStartTwo)/2},\yStart);
+			\coordinate (2) at ({(\xStartOne+\xStartTwo)/2},\yMid);
+			
+			\coordinate (3) at ({(\xEndOne+\xEndTwo)/2},\yMid);
+			\coordinate (4) at ({(\xEndOne+\xEndTwo)/2},\yStart);
+			
+			\draw[-,rounded corners] (bs.east)--(1)--(2)--(3)--(4)--(es.west);
+		\end{scope}
+		
+		\begin{scope}[x=1em,y=1em]
+			\newdimen\useless
+			\newdimen\xStart
+			\newdimen\yStart
+			\newdimen\xEnd
+			\newdimen\yMidOne
+			\newdimen\yMidTwo
+			
+			\path (as);
+			\pgfgetlastxy{\xStart}{\yStart}
+			\path (ab);
+			\pgfgetlastxy{\useless}{\yMidOne}
+			\path (cp.north);
+			\pgfgetlastxy{\useless}{\yMidTwo}
+			\path (be);
+			\pgfgetlastxy{\xEnd}{\useless}
+			
+			\coordinate (1) at (\xStart,\yStart);
+			\coordinate (2) at (\xStart,{(\yMidOne+\yMidTwo)/2});
+			
+			\coordinate (3) at (\xEnd,{(\yMidOne+\yMidTwo)/2});
+			\coordinate (4) at (\xEnd,\yStart);
+			
+			\draw[-,rounded corners] (cp.west)--(1)--(2)--(3)--(4)--(cp.east);
+		\end{scope}
+		
+		\multiLinksLeft{se}{qm,rs,so,ba,ff,lf,cr,ct,sh}
+		\begin{scope}[x=1em,y=1em]
+			\newdimen\useless
+			\newdimen\xend
+			\newdimen\yend
+			\path (be.west);
+			\pgfgetlastxy{\xend}{\yend}
+			\newdimen\xstart
+			\newdimen\ystart
+			\path (hd.east);
+			\pgfgetlastxy{\xstart}{\useless}
+			\foreach \i in {qm,rs,so,ba,ff,lf,cr,ct,hd} {
+				\path (\i.east);
+				\pgfgetlastxy{\useless}{\ystart}
+				\coordinate (1) at ({(\xend+\xstart)/2},\ystart);
+				\coordinate (2) at ({(\xend+\xstart)/2},\yend);
+				\ifdim\ystart=\yend
+				\draw[-] (\i.east)--(be.west);
+				\else
+				\draw[-,rounded corners] (\i.east)--(1)--(2)--(es.west);
+				\fi
+			}
+		\end{scope}
+		
+		\begin{scope}[x=1em,y=1em]
+			\newdimen\xStart
+			\newdimen\yStart
+			\newdimen\xEnd
+			\newdimen\yEnd
+			
+			\path (as.east);
+			\pgfgetlastxy{\xStart}{\yStart}
+			\path (se.west);
+			\pgfgetlastxy{\xEnd}{\yEnd}
+			
+			\coordinate (1) at ({(\xStart+\xEnd)/2},\yStart);
+			\coordinate (2) at ({(\xStart+\xEnd)/2},\yEnd);
+			
+			\draw[-,rounded corners] (as.east)--(1)--(2)--(se.west);
+		\end{scope}
+		
+	\end{tikzpicture}
+	\caption{string}
+	\label{f:strs}
+\end{figure}
+
+\FloatBarrier

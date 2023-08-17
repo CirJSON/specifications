@@ -19,9 +19,12 @@
 \usepackage{float}
 \usepackage{placeins}
 
+\graphicspath{ {./res/} }
+
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes}
+\usetikzlibrary{calc}
 
 \hypersetup{colorlinks,
 	citecolor=black,
@@ -70,6 +73,28 @@
 			\fi
 		}
 	\end{scope}
+}
+
+\newcommand{\multiLinksLeft}[2]{
+\begin{scope}[x=1em,y=1em]
+	\newdimen\xstart
+	\newdimen\ystart
+	\path (#1.east);
+	\pgfgetlastxy{\xstart}{\ystart}
+	\foreach \i in {#2} {
+		\newdimen\xend
+		\newdimen\yend
+		\path (\i.west);
+		\pgfgetlastxy{\xend}{\yend}
+		\coordinate (1) at ({(\xend+\xstart)/2},\ystart);
+		\coordinate (2) at ({(\xend+\xstart)/2},\yend);
+		\ifdim\ystart=\yend
+		\draw[-] (#1.east)--(\i.west);
+		\else
+		\draw[-,rounded corners] (#1.east)--(1)--(2)--(\i.west);
+		\fi
+	}
+\end{scope}
 }
 
 \newcommand{\multiLinksBase}[3]{

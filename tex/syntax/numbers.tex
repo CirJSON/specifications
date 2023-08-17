@@ -11,28 +11,50 @@ The digits are the code points U+0030 through U+0039.
 
 Numeric values that cannot be represented as sequences of digits (such as \texttt{Infinity} and \texttt{NaN}) are not permitted.
 
-\begin{figure}[!htbp]
+\begin{figure}[H]
 	\centering
-	\tikzset{
-		bas/.style={draw, fill=couleurback, thick, align=flush center, line width=2pt},
-		tok/.style={bas, rounded corners=8pt, text width=8pt, text height=8pt},
-		val/.style={bas},
-	}
-	\begin{tikzpicture}[line width=2pt]
-		\matrix[row sep=1em, column sep=0.5em] {
-			\node{\textbf{\textit{number}}}; & ~ & ~ & ~ & ~ & ~ & \node(up){~}; & ~ & ~ & ~ & ~ \\
-			\node(start){~}; & ~ & \node(bd){~}; & \node[tok](zer){0}; & ~ & \node[tok](dot){\texttt{.}}; & \node[val](dfl){\textit{digit}}; & ~ & ~ & ~ & \node(end){~}; \\
-			~ & \node[tok](neg){\texttt{-}}; & ~ & \node[val](fdi){\textit{digit} \\ \textit{1-9}}; & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\
-		};
-		
-		\draw[|-] (start) -- (zer.west);
-		\draw[-] (zer.east) -- (dot.west);
-		\draw[-] (dot.east) -- (dfl.west);
-		\draw[-|] (dfl.east) -- (end);
-		
-		\multiLinksRight{start}{neg}
-		\multiLinks{neg}{bd}
-	\end{tikzpicture}
+	\includegraphics[scale=0.375]{number}
 	\caption{number}
 	\label{f:nums}
 \end{figure}
+
+%\begin{figure}[!htbp]
+%	\centering
+%	\tikzset{
+%		bas/.style={draw, fill=couleurback, thick, align=flush center, line width=2pt},
+%		tok/.style={bas, rounded corners=8pt, text width=8pt, text height=8pt},
+%		val/.style={bas},
+%	}
+%	\begin{tikzpicture}[line width=2pt]
+%		\matrix[row sep=1em, column sep=0.5em] {
+%			\node{\textbf{\textit{number}}}; & ~ & ~ & ~ & ~ & ~ & \node(up){~}; & ~ & ~ & ~ & ~ \\
+%			\node(start){~}; & ~ & \node(bd){~}; & \node[tok](zer){0}; & \node(bDot){~}; & \node[tok](dot){\texttt{.}}; & \node[val](dfl){\textit{digit}}; & ~ & ~ & ~ & \node(end){~}; \\
+%			~ & \node[tok](neg){\texttt{-}}; & ~ & \node[val](fdi){\textit{digit} \\ \textit{1-9}}; & \node(od){~}; & \node(ddi){~}; & ~ & ~ & ~ & ~ & ~ \\
+%			~ & ~; & ~ & ~ & \node[val](dint){\textit{digit}}; & \node(adi){~}; & ~ & \node[tok](e){\texttt{e}}; & ~ & ~ & ~ \\
+%		};
+%		
+%		\draw[|-] (start) -- (zer.west);
+%		\draw[-] (zer.east) -- (dot.west);
+%		\draw[-] (dot.east) -- (dfl.west);
+%		\draw[-|] (dfl.east) -- (end);
+%		
+%		\multiLinksRight{start}{neg}
+%		\multiLinks{neg}{bd}
+%		
+%		\begin{scope}[x=1em,y=1em]
+%			\newdimen\useless
+%			\newdimen\xOd
+%			\newdimen\yOd
+%			\newdimen\yBDot
+%			\path (od);
+%			\pgfgetlastxy{\xOd}{\yOd}
+%			\path (bDot);
+%			\pgfgetlastxy{\useless}{\yBDot}
+%			\coordinate (1) at (\xOd,\yOd);
+%			\coordinate (2) at (\xOd,\yBDot);
+%		\end{scope}
+%		\draw[-,rounded corners] (fdi.east)--(1)--(2)--(dot.west);
+%	\end{tikzpicture}
+%	\caption{number}
+%	\label{f:nums}
+%\end{figure}
